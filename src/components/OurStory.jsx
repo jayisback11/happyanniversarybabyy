@@ -17,9 +17,9 @@ const OurStory = () => {
         <div className="relative w-full pb-[56.25%] h-0 overflow-hidden rounded-xl shadow-lg">
           <iframe
             className="absolute top-0 left-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+            src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=0`}
             title="Our Story Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             frameBorder="0"
           />
