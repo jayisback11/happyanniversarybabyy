@@ -12,7 +12,7 @@ const OurStory = () => {
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showVideo, setShowVideo] = useState(false); // New state for visual sync
+  const [showVideo, setShowVideo] = useState(false);
 
   const videoId = 'g9Euwg4tGBE';
 
@@ -25,7 +25,8 @@ const OurStory = () => {
       modestbranding: 1,
       rel: 0,
       iv_load_policy: 3,
-      fs: 0,
+      fs: 1, // Enabled to allow the iframe to permit fullscreen requests
+      playsinline: 1, // Critical for mobile inline playback
     },
   };
 
@@ -33,10 +34,9 @@ const OurStory = () => {
     playerRef.current = event.target;
     playerRef.current.setVolume(volume);
     
-    // Tiny delay to ensure the video has started and the thumbnail is gone
     setTimeout(() => {
       setShowVideo(true);
-    }, 400);
+    }, 600);
 
     progressInterval.current = setInterval(() => {
       if (playerRef.current && isPlaying) {
@@ -62,16 +62,36 @@ const OurStory = () => {
     }
   }, [volume]);
 
+  // Handle Fullscreen Change (Cross-browser)
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const isFull = !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+      setIsFullscreen(isFull);
     };
+
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
   }, []);
 
-  const togglePlay = () => {
+  const togglePlay = (e) => {
+    // Prevent double-triggering if clicking buttons inside the overlay
+    if (e) e.stopPropagation();
     if (!playerRef.current) return;
+    
     const playerState = playerRef.current.getPlayerState();
     if (playerState === 1) { 
       playerRef.current.pauseVideo();
@@ -90,20 +110,35 @@ const OurStory = () => {
     setProgress(newProgress);
   };
 
-  const rewind = () => {
+  const rewind = (e) => {
+    e.stopPropagation();
     if (playerRef.current) {
       const currentTime = playerRef.current.getCurrentTime();
       playerRef.current.seekTo(currentTime - 10, true);
     }
   };
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen().catch(err => {
-        console.error(`Error enabling full-screen: ${err.message}`);
-      });
+  const toggleFullscreen = (e) => {
+    e.stopPropagation();
+    const elem = containerRef.current;
+    if (!elem) return;
+
+    if (!isFullscreen) {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen(); // iOS/Safari
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
     } else {
-      document.exitFullscreen();
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     }
   };
 
@@ -118,12 +153,12 @@ const OurStory = () => {
         
         <div 
           ref={containerRef}
-          className="video-container relative shadow-2xl rounded-2xl overflow-hidden bg-black aspect-video group"
+          className={`video-container relative shadow-2xl rounded-2xl overflow-hidden bg-black aspect-video group ${isFullscreen ? 'w-screen h-screen rounded-none' : ''}`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* YouTube Player Wrapper - Only visible when showVideo is true */}
-          <div className={`absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-500 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
+          {/* YouTube Player Wrapper */}
+          <div className={`absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-700 ${showVideo ? 'opacity-100' : 'opacity-0'}`}>
             <YouTube 
               videoId={videoId} 
               opts={opts} 
@@ -133,7 +168,7 @@ const OurStory = () => {
             />
           </div>
 
-          {/* Black Curtain: Solid black cover that hides the thumbnail */}
+          {/* Black Curtain */}
           {!showVideo && (
             <div className="absolute inset-0 z-40 bg-black flex items-center justify-center">
               <div className="animate-pulse text-rose-500 text-xl italic" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -142,33 +177,34 @@ const OurStory = () => {
             </div>
           )}
 
-          {/* Middle Click Play/Pause Overlay */}
+          {/* Controls Overlay */}
           <div 
-            className={`absolute inset-0 z-20 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-300 flex flex-col justify-end p-6 cursor-pointer ${isHovered || isFullscreen ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-transparent to-transparent transition-opacity duration-300 flex flex-col justify-end p-4 md:p-6 cursor-pointer ${isHovered || isFullscreen || !isPlaying ? 'opacity-100' : 'opacity-0'}`}
             onClick={togglePlay}
           >
-            <div onClick={(e) => e.stopPropagation()} className="w-full cursor-default">
+            {/* Range and Buttons Wrapper */}
+            <div onClick={(e) => e.stopPropagation()} className="w-full cursor-default select-none">
               <input 
                 type="range"
                 min="0"
                 max="100"
                 value={progress}
                 onChange={handleSeek}
-                className="w-full h-1 mb-4 bg-white/30 rounded-lg appearance-none cursor-pointer accent-rose-500 hover:h-2 transition-all"
+                className="w-full h-1.5 mb-4 bg-white/30 rounded-lg appearance-none cursor-pointer accent-rose-500 hover:h-2 transition-all"
               />
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <button onClick={togglePlay} className="text-white hover:text-rose-400">
-                    {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+              <div className="flex items-center justify-between touch-none">
+                <div className="flex items-center gap-3 md:gap-6">
+                  <button onClick={togglePlay} className="text-white hover:text-rose-400 transition-colors">
+                    {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
                   </button>
 
-                  <button onClick={rewind} className="text-white hover:text-rose-400 flex items-center gap-1">
-                    <RotateCcw size={20} />
-                    <span className="text-[10px] font-sans">10s</span>
+                  <button onClick={rewind} className="text-white hover:text-rose-400 flex items-center gap-1 transition-colors">
+                    <RotateCcw size={22} />
+                    <span className="text-[10px] font-sans font-bold">10s</span>
                   </button>
 
-                  <div className="flex items-center gap-2 ml-2">
+                  <div className="hidden sm:flex items-center gap-2 ml-2">
                     <button onClick={() => setVolume(volume === 0 ? 50 : 0)} className="text-white">
                       {volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
                     </button>
@@ -182,8 +218,8 @@ const OurStory = () => {
                   </div>
                 </div>
 
-                <button onClick={toggleFullscreen} className="text-white hover:text-rose-400 p-1">
-                  {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
+                <button onClick={toggleFullscreen} className="text-white hover:text-rose-400 p-2 transition-transform active:scale-90">
+                  {isFullscreen ? <Minimize size={26} /> : <Maximize size={26} />}
                 </button>
               </div>
             </div>

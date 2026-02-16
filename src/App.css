@@ -718,3 +718,33 @@
     text-align: left;
   }
 }
+
+/* Cross-browser Fullscreen Styles */
+.video-container:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+}
+
+.video-container:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+}
+
+/* Fix for volume slider on mobile */
+input[type='range'] {
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #f43f5e; /* rose-500 */
+  cursor: pointer;
+}

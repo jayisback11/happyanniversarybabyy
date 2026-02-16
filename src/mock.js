@@ -44,8 +44,6 @@ export const mockData = {
 
       "I’m counting down the days until 'goodnight' isn't a text message anymore, but something I get to whisper to you in person. Until then, just know I’m right here, cheering you on and loving you more than you probably realize.",
 
-      "You are worth every mile, every lonely night, and every moment of missing you. I would choose this distance a thousand times if it always led me back to you.",
-
       "Thank you for the best year of my life, Babyy."
     ],
     closing: "Forever yours,\nThe one who loves you across any distance"
