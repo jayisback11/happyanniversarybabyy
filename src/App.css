@@ -1,0 +1,720 @@
+/* Import elegant fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ==================== PASSWORD GATE ==================== */
+.password-gate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #1a1a1a 100%);
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.password-gate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 138, 101, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 50%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.password-container {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  width: 100%;
+}
+
+.password-content {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 138, 101, 0.2);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.heart-icon {
+  color: #FF8A65;
+  margin: 0 auto 1.5rem;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.password-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #FFE6DC;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.password-subtitle {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem;
+  color: #FFCBB3;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.password-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.password-label {
+  display: block;
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  color: #FFD7C2;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.password-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 138, 101, 0.3) !important;
+  color: #FFE6DC !important;
+  font-size: 1.125rem !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 12px !important;
+  text-align: center;
+  letter-spacing: 0.05em;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.password-input:focus {
+  border-color: #FF8A65 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 138, 101, 0.1) !important;
+}
+
+.password-input.error {
+  border-color: #FF6B6B !important;
+  animation: shake 0.5s;
+}
+
+.password-error {
+  color: #FF8A65;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.password-submit {
+  width: 100%;
+  background: linear-gradient(135deg, #FF8A65 0%, #FF6B6B 100%) !important;
+  color: #FFFFFF !important;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem !important;
+  padding: 0.875rem 2rem !important;
+  border: none !important;
+  border-radius: 12px !important;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.password-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+}
+
+.password-footer {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 138, 101, 0.2);
+}
+
+.password-hint {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9375rem;
+  color: #FFCBB3;
+  font-style: italic;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* ==================== MUSIC PLAYER ==================== */
+.music-player {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.music-toggle,
+.music-volume {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 138, 101, 0.3) !important;
+  color: #FFE6DC !important;
+  border-radius: 50% !important;
+  width: 48px !important;
+  height: 48px !important;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.music-toggle:hover,
+.music-volume:hover {
+  background: rgba(255, 138, 101, 0.2) !important;
+  transform: scale(1.1);
+}
+
+.music-toggle svg.playing {
+  animation: musicPulse 1s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #FFFFFF;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.4);
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.7) 0%, rgba(45, 24, 16, 0.8) 50%, rgba(26, 26, 26, 0.7) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  max-width: 900px;
+}
+
+.hero-tagline {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem;
+  color: #FFCBB3;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 600;
+  color: #FFE6DC;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.5rem;
+  color: #FFD7C2;
+  margin-bottom: 3rem;
+  font-style: italic;
+}
+
+.hero-cta {
+  background: linear-gradient(135deg, #FF8A65 0%, #FF6B6B 100%) !important;
+  color: #FFFFFF !important;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.25rem !important;
+  padding: 1rem 2.5rem !important;
+  border: none !important;
+  border-radius: 12px !important;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(255, 107, 107, 0.4);
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scroll-arrow {
+  color: #FFD7C2;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* Fade in animations */
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.fade-in-delay-1 {
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.fade-in-delay-2 {
+  animation: fadeIn 1s ease-out 0.6s both;
+}
+
+.fade-in-delay-3 {
+  animation: fadeIn 1s ease-out 0.9s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== SECTION STYLES ==================== */
+.section-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 600;
+  color: #FFE6DC;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* ==================== OUR STORY ==================== */
+.story-section {
+  background: #1a1a1a;
+  padding: 6rem 0;
+}
+
+.video-container {
+  margin-bottom: 4rem;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+}
+
+.video-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 26, 26, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #FFE6DC;
+  transition: background 0.3s ease;
+}
+
+.video-overlay:hover {
+  background: rgba(26, 26, 26, 0.5);
+}
+
+.video-placeholder-text {
+  margin-top: 1rem;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem;
+  font-style: italic;
+}
+
+.story-text {
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.story-verse {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.5rem;
+  color: #FFCBB3;
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* ==================== THE 17TH ==================== */
+.seventeenth-section {
+  background: linear-gradient(135deg, #2d1810 0%, #1a1a1a 50%, #2d1810 100%);
+  padding: 6rem 0;
+}
+
+.seventeenth-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  color: #FF8A65;
+}
+
+.seventeenth-content {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding: 0 1rem;
+}
+
+.seventeenth-verse {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.5rem;
+  color: #FFD7C2;
+  margin-bottom: 0.75rem;
+  line-height: 1.8;
+  font-style: italic;
+}
+
+.countdown-container {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.countdown-label {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem;
+  color: #FFCBB3;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 138, 101, 0.3);
+  border-radius: 12px;
+  min-width: 100px;
+}
+
+.countdown-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 600;
+  color: #FF8A65;
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  color: #FFCBB3;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.seventeenth-decoration {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.heart-pulse {
+  color: #FF8A65;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+/* ==================== LOVE LETTER ==================== */
+.letter-section {
+  background: #1a1a1a;
+  padding: 6rem 0;
+}
+
+.letter-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.letter-opening {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  color: #FFE6DC;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.letter-paragraph {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem;
+  color: #FFCBB3;
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.letter-closing {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.25rem;
+  color: #FFD7C2;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  white-space: pre-line;
+  font-style: italic;
+  line-height: 1.8;
+}
+
+.letter-signature {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 138, 101, 0.3);
+  text-align: center;
+}
+
+.letter-ps {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.125rem;
+  color: #FF8A65;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* ==================== FUTURE US ==================== */
+.future-section {
+  position: relative;
+  padding: 6rem 0;
+  overflow: hidden;
+}
+
+.future-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.3);
+}
+
+.future-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(45, 24, 16, 0.9) 0%, rgba(26, 26, 26, 0.95) 100%);
+}
+
+.future-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.future-promises {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+
+.promise-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 200px;
+  color: #FFD7C2;
+}
+
+.promise-item svg {
+  color: #FF8A65;
+}
+
+.promise-item p {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.future-message {
+  margin-bottom: 4rem;
+}
+
+.future-statement {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.75rem;
+  color: #FFCBB3;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.future-statement-emphasis {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.25rem;
+  color: #FF8A65;
+  font-weight: 600;
+}
+
+.future-quote {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 138, 101, 0.3);
+  border-radius: 16px;
+}
+
+.quote-text {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.25rem;
+  color: #FFE6DC;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.quote-text:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== FOOTER ==================== */
+.site-footer {
+  background: #0f0f10;
+  padding: 3rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 138, 101, 0.2);
+}
+
+.footer-text {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.125rem;
+  color: #FFCBB3;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.footer-date {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: #FF8A65;
+  font-weight: 500;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .music-player {
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .music-toggle,
+  .music-volume {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .section-container {
+    padding: 3rem 1.5rem;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .story-verse,
+  .seventeenth-verse {
+    font-size: 1.25rem;
+  }
+  
+  .countdown-grid {
+    gap: 1rem;
+  }
+  
+  .countdown-item {
+    padding: 1rem 1.5rem;
+    min-width: 80px;
+  }
+  
+  .countdown-number {
+    font-size: 2rem;
+  }
+  
+  .future-promises {
+    gap: 2rem;
+  }
+  
+  .letter-paragraph {
+    text-align: left;
+  }
+}
